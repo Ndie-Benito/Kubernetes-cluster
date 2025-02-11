@@ -1,17 +1,48 @@
-terraform{
-  required_providers{
-    azurerm={
-      source="hashicorp/azurerm"
-      version= ">=3.70.0"#this version is for azurerm, NOT terraform version
-    }
-  }
-  required_version=">=1.4.0"#this version is for Terraform Version, NOT azurerm
+variable "subscription_id"{
+  type=string
 }
 
-provider "azurerm"{
-  features{}  
-  subscription_id=var.subscription_id
-  client_id=var.client_id
-  client_secret=var.client_secret
-  tenant_id=var.tenant_id
+variable "client_id"{
+  type=string
+}
+variable "client_secret"{
+  type=string
+}
+variable "tenant_id"{
+  type=string
+}
+variable "resource_group_name" {
+  description = "Nom du groupe de ressources Azure"
+  type        = string
+  default     = "my-resource-group"
+}
+
+variable "location" {
+  description = "Localisation des ressources Azure"
+  type        = string
+  default     = "West Europe"
+}
+
+variable "aks_cluster_name" {
+  description = "Nom du cluster AKS"
+  type        = string
+  default     = "benito-aks-cluster"
+}
+
+variable "node_pools" {
+  description = "Configuration des node pools"
+  type = map(object({
+    node_count = number
+    vm_size    = string
+  }))
+  default = {
+    "pool1" = {
+      node_count = 1
+      vm_size    = "Standard_DS2_v2"
+    },
+    "pool2" = {
+      node_count = 2
+      vm_size    = "Standard_DS3_v2"
+    }
+  }
 }
